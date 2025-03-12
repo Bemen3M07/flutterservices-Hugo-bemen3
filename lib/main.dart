@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../services/car_http_service.dart'; // Importa el servicio para obtener coches
-import '../models/car_model.dart'; // Importa el modelo de coche
+import '../services/car_http_service.dart';
+import '../models/car_model.dart';
+import '../screens/car_detail_screen.dart';
+import '../screens/jokes_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,7 +32,7 @@ class _CarsScreenState extends State<CarsScreen> {
   @override
   void initState() {
     super.initState();
-    futureCars = CarHttpService().getCars(); // Obtiene los coches desde el servicio
+    futureCars = CarHttpService().getCars();
   }
 
   @override
@@ -38,6 +40,17 @@ class _CarsScreenState extends State<CarsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lista de Coches'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.mood),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => JokesScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<CarsModel>>(
         future: futureCars,
@@ -58,6 +71,14 @@ class _CarsScreenState extends State<CarsScreen> {
                   title: Text('${car.make} ${car.model}'),
                   subtitle: Text('Año: ${car.year}, Tipo: ${car.type}'),
                   leading: Icon(Icons.directions_car),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CarDetailScreen(car: car),
+                      ),
+                    );
+                  },
                 );
               },
             );
